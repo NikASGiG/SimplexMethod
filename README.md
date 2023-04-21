@@ -16,6 +16,7 @@ mvn package
 To run the Simplex Method application, navigate to the target directory and run the .jar file.
 
 cd target
+
 java -jar SimplexMethod-1.0-lab1.jar
 
 Once the application is running, you can enter your linear programming problem into the input fields and click the "Calculate" button to solve it using the simplex algorithm. Also you can do report in "report.xls" file.
