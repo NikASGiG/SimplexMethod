@@ -5,8 +5,10 @@
 package com.nikasgig.simplexmethod.service;
 
 import com.nikasgig.simplexmethod.form.MainJFrame;
+import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -33,23 +35,46 @@ public class OutputService {
         return table;
     }
     
-    public static void showResult(MainJFrame frame, double[][] result, double[] extractResults){
-        int rowCount = result.length;
-        int columnCount = result[0].length;
+    public static void showResult(MainJFrame frame, double[][] tableResult, double[] extractResults, Object[] result){
+        int rowCount = tableResult.length;
+        int columnCount = tableResult[0].length;
         DefaultTableModel model = new DefaultTableModel(rowCount, columnCount);
         // Заполнение модели данными из массива
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
-                model.setValueAt(result[i][j], i, j);
+                model.setValueAt(tableResult[i][j], i, j);
             }
         }
         frame.jTable4.setModel(model);
         
-        frame.jTextField3.setText(Double.toString(extractResults[0]));
+        
         StringBuilder temp = new StringBuilder();
         for (double el : extractResults) {
            temp.append(Double.toString(el));
         }
-        frame.jTextField4.setText(temp.toString());
+        
+        //////////////////////////////////////////////
+        System.out.println("=====");
+        StringBuilder xResult = new StringBuilder();
+        if (result == null) {
+            System.out.println("Unbounded solution");
+            JOptionPane.showMessageDialog(null, "Unbounded solution");
+        } else {
+             //Get the solution vector and objective function value
+            double[][] solution = (double[][]) result[0];
+            double objValue = (double) result[1];
+
+            // Print the solution vector and objective function value
+            System.out.println("Solution:");
+            DecimalFormat decimalFormat = new DecimalFormat("#.#");
+            for (int i = 0; i < solution.length; i++) {
+                xResult.append("x").append(i + 1).append(" = ");
+                xResult.append(decimalFormat.format(solution[i][0])).append("; ");
+            }
+            System.out.println("Objective function value: " + objValue);
+            frame.jTextField3.setText(Double.toString(objValue));
+        }
+        frame.jTextField4.setText(xResult.toString());
+        System.out.println("=====");
     }
 }
